@@ -1,10 +1,12 @@
 import requests
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 import pandas as pd
 import json
 from bs4 import BeautifulSoup
 
 try:
-    page = requests.get('https://wre-rapps.utah.gov/Reservoir/')
+    page = requests.get('https://wre-rapps.utah.gov/Reservoir/', verify=False)
     page.raise_for_status()
     print("Page fetched successfully")
 
