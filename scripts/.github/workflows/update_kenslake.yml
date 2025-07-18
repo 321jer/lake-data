@@ -1,0 +1,29 @@
+name: Update Ken's Lake Data
+
+on:
+  schedule:
+    - cron: '0 0 1 * *'  # Monthly at midnight UTC on 1st day
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Python dependencies
+        run: |
+          python3 -m pip install requests beautifulsoup4 pandas
+
+      - name: Run scraper
+        run: |
+          python3 scripts/update_kenslake.py
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add kenslake_data.json
+          git commit -m "Update Ken's Lake data" || echo "No changes to commit"
+          git push
